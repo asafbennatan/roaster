@@ -20,6 +20,7 @@ import java.util.ServiceLoader;
 
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.JavaUnit;
+import org.jboss.forge.roaster.model.ParsingContext;
 import org.jboss.forge.roaster.model.source.JavaSource;
 import org.jboss.forge.roaster.spi.FormatterProvider;
 import org.jboss.forge.roaster.spi.JavaParser;
@@ -268,6 +269,11 @@ public final class Roaster
       }
       throw new ParserException("Cannot find JavaParser capable of parsing the requested data"); 
    }
+
+   public static ParsingContext createParsingContext(){
+      return new ParsingContextImpl();
+   }
+
 
    /**
     * Read the given {@link InputStream} and parse its data into a new {@link JavaType} instance of the given type. The

@@ -7,9 +7,10 @@
 package org.jboss.forge.test.roaster.model;
 
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.ParsingContext;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -21,22 +22,34 @@ import java.util.List;
  */
 public class ClassLoaderWildcardImportResolverTest
 {
-   private JavaClassSource javaClass;
+   private static JavaClassSource javaClass;
+    private static JavaClassSource second;
 
-   @BeforeEach
-   public void reset() throws IOException
+
+    @BeforeAll
+   public static void reset() throws IOException
    {
-      String fileName = "/org/jboss/forge/grammar/java/MockWildcardClass.java";
-      try (InputStream stream = ClassLoaderWildcardImportResolverTest.class.getResourceAsStream(fileName))
-      {
-         javaClass = Roaster.parse(JavaClassSource.class, stream);
-      }
+       ParsingContext parsingContext=Roaster.createParsingContext();
+
+       String fileName = "/org/jboss/forge/grammar/java/MockWildcardClass.java";
+       try (InputStream stream = ClassLoaderWildcardImportResolverTest.class.getResourceAsStream(fileName))
+       {
+           javaClass = parsingContext.parse(JavaClassSource.class, stream);
+       }
+       fileName = "/org/jboss/forge/grammar/java/HttpRequest.java";
+       try (InputStream stream = ClassLoaderWildcardImportResolverTest.class.getResourceAsStream(fileName))
+       {
+           second = parsingContext.parse(JavaClassSource.class, stream);
+       }
+
+
    }
 
    @Test
    public void testType()
    {
       Assertions.assertEquals(List.class.getCanonicalName(),javaClass.getMethod("getList").getReturnType().getQualifiedName());
+      Assertions.assertEquals("org.jboss.forge.grammar.java.HttpRequest",javaClass.getMethod("getHttpRequest").getReturnType().getQualifiedName());
 
    }
 

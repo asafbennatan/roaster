@@ -25,14 +25,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jface.text.Document;
 import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.Annotation;
-import org.jboss.forge.roaster.model.Field;
-import org.jboss.forge.roaster.model.JavaType;
-import org.jboss.forge.roaster.model.Method;
-import org.jboss.forge.roaster.model.Parameter;
-import org.jboss.forge.roaster.model.SyntaxError;
-import org.jboss.forge.roaster.model.Type;
-import org.jboss.forge.roaster.model.Visibility;
+import org.jboss.forge.roaster.model.*;
 import org.jboss.forge.roaster.model.ast.MethodFinderVisitor;
 import org.jboss.forge.roaster.model.ast.TypeDeclarationFinderVisitor;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
@@ -56,6 +49,7 @@ class EnumConstantBodyImpl implements EnumConstantSource.Body
    private static final String ENUM_CONSTANTS_BODY_ALLOW_ONLY_CLASSES_TO_BE_ADDED = "Enum constants body allow only classes to be added ";
    private final EnumConstantSource enumConstant;
    private final JavaEnumSource javaEnum;
+   protected ParsingContext parsingContext;
 
    EnumConstantBodyImpl(EnumConstantSource enumConstant)
    {
@@ -981,4 +975,13 @@ class EnumConstantBodyImpl implements EnumConstantSource.Body
       return toString();
    }
 
+
+   @Override
+   public ParsingContext getParsingContext() {
+      return parsingContext;
+   }
+
+   public void setParsingContext(ParsingContext parsingContext) {
+      this.parsingContext = parsingContext;
+   }
 }

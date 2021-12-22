@@ -29,11 +29,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.TextEdit;
 import org.jboss.forge.roaster.ParserException;
-import org.jboss.forge.roaster.model.Annotation;
-import org.jboss.forge.roaster.model.JavaType;
-import org.jboss.forge.roaster.model.SyntaxError;
-import org.jboss.forge.roaster.model.Type;
-import org.jboss.forge.roaster.model.Visibility;
+import org.jboss.forge.roaster.model.*;
 import org.jboss.forge.roaster.model.ast.AnnotationAccessor;
 import org.jboss.forge.roaster.model.ast.ModifierAccessor;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
@@ -59,6 +55,7 @@ public abstract class JavaSourceImpl<O extends JavaSource<O>> implements JavaSou
    protected final Document document;
    protected final CompilationUnit unit;
    protected final JavaSource<?> enclosingType;
+   protected ParsingContext parsingContext;
 
    protected JavaSourceImpl(JavaSource<?> enclosingType, final Document document, final CompilationUnit unit)
    {
@@ -438,6 +435,16 @@ public abstract class JavaSourceImpl<O extends JavaSource<O>> implements JavaSou
          if (imprt.getSimpleName().equals(result))
          {
             return imprt.getQualifiedName();
+         }
+      }
+      //resolve the current package if exists
+      if (getPackage() != null)
+      {
+         String className = getPackage() + "." + result;
+         ParsingContext parsingContext = getParsingContext();
+         if(parsingContext !=null&& parsingContext.getType(className)!=null)
+         {
+            return className;
          }
       }
 
@@ -868,6 +875,15 @@ public abstract class JavaSourceImpl<O extends JavaSource<O>> implements JavaSou
          }
       }
       return result;
+   }
+
+   @Override
+   public ParsingContext getParsingContext() {
+      return parsingContext;
+   }
+
+   public void setParsingContext(ParsingContext parsingContext) {
+      this.parsingContext = parsingContext;
    }
 
    @Override
