@@ -24,6 +24,7 @@ public class ClassLoaderWildcardImportResolverTest
 {
    private static JavaClassSource javaClass;
     private static JavaClassSource second;
+    private static JavaClassSource third;
 
 
     @BeforeAll
@@ -41,6 +42,11 @@ public class ClassLoaderWildcardImportResolverTest
        {
            second = parsingContext.parse(JavaClassSource.class, stream);
        }
+       fileName = "/org/jboss/forge/grammar/java/Object.java";
+       try (InputStream stream = ClassLoaderWildcardImportResolverTest.class.getResourceAsStream(fileName))
+       {
+           third = parsingContext.parse(JavaClassSource.class, stream);
+       }
 
 
    }
@@ -50,6 +56,8 @@ public class ClassLoaderWildcardImportResolverTest
    {
       Assertions.assertEquals(List.class.getCanonicalName(),javaClass.getMethod("getList").getReturnType().getQualifiedName());
       Assertions.assertEquals("org.jboss.forge.grammar.java.HttpRequest",javaClass.getMethod("getHttpRequest").getReturnType().getQualifiedName());
+       Assertions.assertEquals("org.jboss.forge.grammar.java.Object",javaClass.getMethod("getObject").getReturnType().getQualifiedName());
+
 
    }
 

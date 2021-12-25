@@ -11,4 +11,7 @@ public class MockWildcardClass {
     public HttpRequest getHttpRequest(){
         return new HttpRequest();
     }
+    public Object getObject(){
+        return new Object();
+    }
 }

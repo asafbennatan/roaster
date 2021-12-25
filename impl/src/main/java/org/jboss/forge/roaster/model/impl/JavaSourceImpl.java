@@ -420,11 +420,7 @@ public abstract class JavaSourceImpl<O extends JavaSource<O>> implements JavaSou
          return result;
       }
 
-      // java lang types are implicitly imported and we don't allow a duplicate simple name in another package
-      if (Types.isJavaLang(result))
-      {
-         return "java.lang." + result;
-      }
+
 
       List<Import> imports = getImports(); // fetch imports only once
 
@@ -446,6 +442,11 @@ public abstract class JavaSourceImpl<O extends JavaSource<O>> implements JavaSou
          {
             return className;
          }
+      }
+      // java lang types are implicitly imported after package and explicit imports
+      if (Types.isJavaLang(result))
+      {
+         return "java.lang." + result;
       }
 
       // if we have no imports and no fqn name the following doesn't need to be executed
